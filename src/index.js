@@ -1,6 +1,7 @@
 module.exports = function getZerosCount(number, base) {
   var maxSimpleNum = base;
   var ins = 1;
+  var ins2 = 1;
 
   function fff(simpleNum) {
     var maxSimpleNum22 = simpleNum;
@@ -30,6 +31,20 @@ module.exports = function getZerosCount(number, base) {
     }
   }
   divide5(number);
+
+  var k1 = 1;
+  function SearchK1(x){
+    if (x % (maxSimpleNum * maxSimpleNum) === 0) {
+      k1++;
+      var x2 = x / maxSimpleNum;
+      SearchK1(x2);
+    };
+  }
+
+  SearchK1(base);
+
+    answer1 = Math.floor(answer1 / k1);
+  
 
   return answer1;
 }
