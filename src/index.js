@@ -1,52 +1,42 @@
 module.exports = function getZerosCount(number, base) {
   let maxSimpleNum = base;
-  let ins = 1;
-  
-  function getMaxSimpleNum(simpleNum) {
-    let maxSimpleNumFun = simpleNum;
-    for (let i = 2; i <= simpleNum/2 ; i++){
-      let balance = simpleNum % i;
+  let arrTime = []; 
+  let getMaxSimpleNum = (simpleNum) => {
+    let simpleNumTime = simpleNum;
+    let arr = [];
+    for (let i = 2; i <= simpleNum ; i++){
+      let balance = simpleNumTime % i;
       if (balance === 0){
-        maxSimpleNumFun = i;
+        if (arr[i] === undefined) {
+          arr[i] = 0;
+        }
+        arr[i]++;
+        simpleNumTime /= i;
+        i--;
       }
     }
-    if (simpleNum !== maxSimpleNumFun){
-      maxSimpleNum = maxSimpleNumFun;
-      ins++;
-      getMaxSimpleNum(maxSimpleNum);
+    return arr;
+  }
+  arrTime = getMaxSimpleNum(maxSimpleNum);
+  let arrNew = [];
+  for (let i = 0; i < arrTime.length; i++) {
+    if (arrTime[i] !== undefined) {
+      arrNew.push([i, arrTime[i]])
     }
   }
-  getMaxSimpleNum(maxSimpleNum);
-  let answer = 0;
-  
-  function divideBase(n){
+  let divideBase = (n, maxSimpleNum) => {
+    let answer = 0;
     let newN = n / maxSimpleNum;
     if (newN >= 1){
       newN = Math.floor(newN);
       answer += newN;
-      divideBase(newN);
+      answer += divideBase(newN, maxSimpleNum);
     }
+    return answer;
   }
-  divideBase(number);
-  
-  let k1 = 1;
-  function SearchK1(x){
-    if (x % (maxSimpleNum * maxSimpleNum) === 0) {
-      k1++;
-      let x2 = x / maxSimpleNum;
-      SearchK1(x2);
-    };
+  for (let i = 0; i < arrNew.length; i++) {
+    arrNew[i][2] = Math.floor(divideBase(number, arrNew[i][0]) / (arrNew[i][1]));
   }
-  SearchK1(base);
-  answer = Math.floor(answer / k1);
-
-  let answer2 = answer;
-  k1 = 1;
-  maxSimpleNum = 2;
-  answer = 0;
-  divideBase(number);
-  SearchK1(base);
-  answer = Math.floor(answer / k1);
-  if (answer > answer2) return answer2
-  else return answer; 
+  arrNew.sort((a, b) => a[2] - b[2]);
+  return arrNew[0][2];
 }
